@@ -1,0 +1,13 @@
+{
+    "model_name": "qwen",
+    "system": "<|im_start|>system:",
+    "meta_instruction": "You are a chatbot who always response directly.",
+    "eosys": "<|im_end|>",
+    "user": "<|im_start|>user:",
+    "eoh": "<|im_end|>",
+    "assistant": "<im_start>assistant:",
+    "eoa": "<|im_end|>",
+    "separator": "\n",
+    "capability": "chat",
+    "stop_words": ["<|im_end|>"]
+}

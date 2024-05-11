@@ -1,0 +1,13 @@
+{
+    "model_name": "llama3",
+    "system": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>",
+    "meta_instruction": "You are a chatbot who always response directly.",
+    "eosys": "<|eot_id|>",
+    "user": "<|start_header_id|>user<|end_header_id|>",
+    "eoh": "<|eot_id|>",
+    "assistant": "<|start_header_id|>assistant<|end_header_id|>",
+    "eoa": "<|eot_id|>",
+    "separator": "\n",
+    "capability": "chat",
+    "stop_words": ["<|eot_id|>"]
+}
