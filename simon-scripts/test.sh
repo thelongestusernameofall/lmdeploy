@@ -16,3 +16,5 @@ curl http://{$server_ip}:{$server_port}/v1/chat/completions \
 		  "stop":["<|im_end|>"]
 	   }'
 
+# test remote-dev
+
