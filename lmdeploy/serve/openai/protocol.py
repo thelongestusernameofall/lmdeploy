@@ -288,6 +288,18 @@ class EncodeResponse(BaseModel):
     length: Union[int, List[int]]
 
 
+class DecodeRequest(BaseModel):
+    """Decode request. Simon added, 2024年05月15日14:30:50"""
+    input_ids: Union[List[int], List[List[int]]]
+    skip_special_tokens: Optional[bool] = True
+
+
+class DecodeResponse(BaseModel):
+    """Decode response. Simon added, 2024年05月15日14:30:50"""
+    input: Union[str, List[str]]
+    length: Union[int, List[int]]
+
+
 class GenerateRequest(BaseModel):
     """Generate request."""
     prompt: Union[str, List[Dict[str, Any]]]

@@ -26,7 +26,7 @@ from lmdeploy.serve.openai.protocol import (  # noqa: E501
     CompletionResponseStreamChoice, CompletionStreamResponse, DeltaMessage,
     EmbeddingsRequest, EncodeRequest, EncodeResponse, ErrorResponse,
     GenerateRequest, GenerateRequestQos, GenerateResponse, LogProbs, ModelCard,
-    ModelList, ModelPermission, TopLogprob, UsageInfo)
+    ModelList, ModelPermission, TopLogprob, UsageInfo, DecodeRequest, DecodeResponse)
 from lmdeploy.serve.qos_engine.qos_engine import QosEngine
 from lmdeploy.tokenizer import DetokenizeState, Tokenizer
 from lmdeploy.utils import get_logger
@@ -894,6 +894,31 @@ async def encode(request: EncodeRequest, raw_request: Request = None):
             length.append(len(ids))
         return EncodeResponse(input_ids=encoded, length=length)
 
+
+@app.post('/v1/decode', dependencies=[Depends(check_api_key)])
+async def decode(request: DecodeRequest, raw_request: Request = None):
+    """Decode encoded inputs to text.
+
+    The request should be a JSON object with the following field:
+    - input_ids: the encoded input IDs to be decoded. In List[int] or List[List[int]] format.
+    """
+
+    def decode(input_ids: List[int], skip_special_tokens: bool) -> str:
+        decoded_text = VariableInterface.async_engine.tokenizer.decode(input_ids,
+                                                                       skip_special_tokens=skip_special_tokens)
+        return decoded_text
+
+    skip_special_tokens = request.skip_special_tokens if hasattr(request, 'skip_special_tokens') else False
+    if isinstance(request.input_ids[0], int):
+        decoded = decode(request.input_ids, skip_special_tokens)
+        return DecodeResponse(input=decoded, length=len(decoded))
+    else:
+        decoded, length = [], []
+        for ids in request.input_ids:
+            text = decode(ids, skip_special_tokens)
+            decoded.append(text)
+            length.append(len(text))
+        return DecodeResponse(input=decoded, length=length)
 
 @app.post('/v1/chat/interactive_qos')
 async def chat_interactive_v1_qos(request: GenerateRequestQos,
